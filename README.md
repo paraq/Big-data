@@ -1,5 +1,4 @@
 # spark_python
 
-### Degrees of separation (bfs.py)
-Implemetation of BFS in apache spark using Python.
-Script determines whether two marvel superheroes aer connected or not.
+This repository contains solutions for [Taming Big Data with Apache Spark and Python course](https://www.udemy.com/taming-big-data-with-apache-spark-hands-on/)
+

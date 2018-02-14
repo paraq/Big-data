@@ -21,18 +21,21 @@ def initMap(line):
     return ( userID, (movieID,rating) )
 
 def filterDuplicate(value):
+    """ Filter out duplicate movie pairs"""
     ratings=value[1]
     (movieId1, rating1)=ratings[0]
     (movieId2, rating2)=ratings[1]
     return movieId1 < movieId2
     
 def newMap(value):
+    """ converts tuples ((m1,r1),(m2,r2)) => ((m1,m2),(r1,r2))"""
     ratings=value[1]
     (movieId1, rating1)=ratings[0]
     (movieId2, rating2)=ratings[1]
     return ( (movieId1,movieId2),(rating1,rating2) )
 
 def findSimilarity(values):
+    """ Returns Similarity values between movie pair"""
     numPairs=0
     sum_xx = sum_yy = sum_xy = 0
     for ratingX, ratingY in values:
@@ -49,15 +52,17 @@ def findSimilarity(values):
     return (score,numPairs)
     
 def filterSelect(PairSim):
+    """ Select only requested movie. score and co-occurance should be greater than thresholds"""
     return ( (PairSim[0][0]==movieID or PairSim[0][1]==movieID) and \
              (PairSim[1][0] > thresholdscore and PairSim[1][1] > cothreshold) \
            )
     
 def findSimilarmovies(movieID,similarRatings):
+    """ Prints top 10 similar movies"""
     print('Finding Movies similar to :'+ movie_dict[movieID])
 
     thr_filter=similarRatings.filter(filterSelect)
-#thr_filter.saveAsTextFile("movie-fil")
+
 
     similar_movies=thr_filter.sortBy(lambda a: a[1][0],False).take(10)
 
@@ -72,8 +77,7 @@ def findSimilarmovies(movieID,similarRatings):
     
 
 input_rdd=sc.textFile('../ml-100k/u.data')
-#header = input_rdd.first()
-#input_rows=input_rdd.filter(lambda line: line != header)
+
 init_maprdd=input_rdd.map(initMap)
 self_join=init_maprdd.join(init_maprdd)
 unique_self_join=self_join.filter(filterDuplicate)
@@ -92,19 +96,4 @@ thresholdscore=0.97
 cothreshold=50
 
 findSimilarmovies(movieID,similarRatings)
-
-
-    
-    
-    
-    
-
-#sort_rdd.saveAsTextFile("movie-sort")
-
-
-
-
-
-
-
 
